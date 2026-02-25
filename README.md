@@ -1,19 +1,32 @@
-# Atlas Spot Task
+# Atlas Spot Task: Telemetry Anomaly Detection
 
-End-to-end anomaly detection assignment project for multivariate telemetry time-series using **Isolation Forest**, with a reproducible evaluation and visualization workflow.
+This project is your assignment implementation for anomaly detection on telemetry time-series data using an **Isolation Forest** workflow.
 
-## Project Overview
+It includes:
+- a robust data-loading + anomaly detection pipeline,
+- an evaluation/visualization script for reporting,
+- final submission artifacts for Step 5/6.
 
-This repository contains:
-- A primary anomaly detection pipeline that ingests run files from `dataset/normal` and `dataset/anomalies`, standardizes mixed input formats, trains an Isolation Forest on normal data, and produces predictions + plots.
-- A follow-up evaluation/report script that reads saved predictions, computes weak-label metrics, and generates overlay visualizations and summary artifacts.
-- Final submission-ready report and metrics files at the repository root.
+---
 
-## Repository Structure
+## 1) What this project does
+
+The repository solves a practical monitoring problem:
+- ingest telemetry runs from two folders (`normal` and `anomalies`),
+- normalize mixed file formats,
+- train on normal behavior,
+- flag anomalous rows,
+- evaluate with weak labels,
+- generate visuals + report-ready outputs.
+
+Because labels are folder-level (not dense point-level truth), evaluation is **weak-label based** and should be treated as operational guidance.
+
+---
+
+## 2) Project layout
 
 ```text
-.
-├── README.md
+atlas-spot-task/
 ├── assignment_step5_6_report.md
 ├── assignment_step5_6_metrics.csv
 ├── code/
@@ -23,26 +36,25 @@ This repository contains:
 │   ├── step1_prmon_setup_and_familiarization.md
 │   └── task_completion_review.md
 └── prmon/
-    └── ... (upstream prmon project files)
+    └── (reference / setup artifacts from earlier assignment work)
 ```
 
-## Core Scripts
+---
 
-### 1) Detection pipeline
-`code/anomaly_detection_pipeline.py`
+## 3) Main scripts
 
-What it does:
-- Discovers supported files under `dataset/normal` and `dataset/anomalies` (`.csv`, `.tsv`, `.json`, `.log`).
-- Normalizes schema/timestamp handling across files.
-- Selects numeric feature columns.
-- Trains `IsolationForest` (normal-only training split).
-- Produces row-level anomaly flags and scores.
-- Saves:
-  - `predictions.csv`
-  - `metrics.json`
-  - per-file anomaly plot figures
+### `code/anomaly_detection_pipeline.py`
 
-Run example:
+Primary detection pipeline.
+
+**Responsibilities**
+- Discovers and parses supported files: `.csv`, `.tsv`, `.json`, `.log`.
+- Standardizes timestamps and numeric telemetry fields.
+- Trains `IsolationForest` on rows from `dataset/normal`.
+- Predicts anomaly flags/scores for all rows.
+- Exports predictions, metrics, and per-file figures.
+
+**Example run**
 
 ```bash
 python code/anomaly_detection_pipeline.py \
@@ -51,16 +63,19 @@ python code/anomaly_detection_pipeline.py \
   --contamination 0.05
 ```
 
-### 2) Evaluation + visualization report
-`code/evaluation_visualization_report.py`
+---
 
-What it does:
-- Loads pipeline predictions.
-- Computes weak-label metrics (precision, recall, F1, false positive rate, confusion matrix).
-- Generates SVG overlays and confusion matrix visual.
-- Writes analysis markdown report.
+### `code/evaluation_visualization_report.py`
 
-Run example:
+Evaluation and reporting utility over saved predictions.
+
+**Responsibilities**
+- Reads `predictions.csv` from the detection run.
+- Computes weak-label metrics: precision, recall, F1, false-positive rate, confusion matrix.
+- Creates SVG overlays (signal + anomaly markers).
+- Produces summary tables and analysis markdown.
+
+**Example run**
 
 ```bash
 python code/evaluation_visualization_report.py \
@@ -68,44 +83,57 @@ python code/evaluation_visualization_report.py \
   --output-dir code/evaluation_visualization_report_output
 ```
 
-## Data Layout Expected
+---
 
-Place your dataset using this structure:
+## 4) Expected dataset format
 
 ```text
 dataset/
 ├── normal/
-│   ├── run_*.csv|tsv|json|log
+│   ├── *.csv|*.tsv|*.json|*.log
 └── anomalies/
-    ├── run_*.csv|tsv|json|log
+    ├── *.csv|*.tsv|*.json|*.log
 ```
 
-> Note: evaluation uses **weak labels** inferred from folder membership (`normal` vs `anomalies`).
+- `normal/`: baseline behavior used for training.
+- `anomalies/`: runs expected to contain anomalous behavior.
 
-## Environment & Dependencies
+> Weak labels are inferred from folder membership, not true point-by-point annotations.
 
-Recommended: Python 3.9+
+---
 
-Install required libraries:
+## 5) Environment setup
+
+Recommended: **Python 3.9+**
+
+Install dependencies:
 
 ```bash
 pip install numpy pandas matplotlib scikit-learn
 ```
 
-## Typical Workflow
+---
 
-1. Prepare dataset folders (`dataset/normal`, `dataset/anomalies`).
-2. Run detection pipeline (`anomaly_detection_pipeline.py`).
-3. Run evaluation report script (`evaluation_visualization_report.py`).
-4. Review generated outputs and final report files.
+## 6) Typical end-to-end workflow
 
-## Final Submission Artifacts
+1. Prepare `dataset/normal` and `dataset/anomalies`.
+2. Run anomaly detection pipeline.
+3. Run evaluation/visualization report script.
+4. Review outputs and include required files in submission.
 
-Primary grading artifacts included at repository root:
+---
+
+## 7) Final assignment artifacts
+
+Primary deliverables in this repository:
 - `assignment_step5_6_report.md`
 - `assignment_step5_6_metrics.csv`
 
-## Notes
+These are the concise report + numeric evidence files for grading.
 
-- `prmon/` is included as project context/dependency work from earlier assignment steps.
-- The analysis and metrics are designed for assignment reporting and operational triage, not strict point-level ground-truth benchmarking.
+---
+
+## 8) Notes
+
+- The `prmon/` directory is retained from earlier assignment setup/familiarization tasks.
+- Isolation Forest output should be used as **triage support**, not a final root-cause explanation by itself.
