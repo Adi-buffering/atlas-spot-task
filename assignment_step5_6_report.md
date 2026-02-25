@@ -67,6 +67,6 @@ For direct GitHub upload and grading, submit:
 ---
 
 ## AI usage disclosure
-- **Dataset generation and collection:** completed manually by the team; no AI was used to generate the dataset.
+- **Dataset generation and collection:** completed manually by me; no AI was used to generate the dataset.
 - **Model development:** AI assistance was used after building an initial baseline model.
 - **Tool/model used:** Codex 5.3 was used to help optimize and improve the ML model design and implementation.
