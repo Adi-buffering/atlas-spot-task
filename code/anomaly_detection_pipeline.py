@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     """CLI/config block for reproducible runs."""
     parser = argparse.ArgumentParser(description="Isolation Forest anomaly detection for time-series runs")
     parser.add_argument("--dataset-path", default="dataset", help="Root dataset folder")
-    parser.add_argument("--output-dir", default="outputs_code2", help="Output folder")
+    parser.add_argument("--output-dir", default="anomaly_detection_pipeline_output", help="Output folder")
     parser.add_argument(
         "--contamination",
         type=float,
