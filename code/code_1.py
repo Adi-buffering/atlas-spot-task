@@ -84,7 +84,12 @@ def discover_files(base_path: Path) -> List[Tuple[Path, str]]:
 
 
 def _read_delimited(path: Path, sep: str) -> pd.DataFrame:
-    return pd.read_csv(path, sep=sep, engine="python", on_bad_lines="skip")
+    """Read delimited text across multiple pandas versions."""
+    try:
+        return pd.read_csv(path, sep=sep, engine="python", on_bad_lines="skip")
+    except TypeError:
+        # pandas<1.3 compatibility
+        return pd.read_csv(path, sep=sep, engine="python", error_bad_lines=False, warn_bad_lines=False)
 
 
 def _read_json_flexible(path: Path) -> pd.DataFrame:
@@ -169,7 +174,11 @@ def standardize_dataframe(df: pd.DataFrame, file_path: Path, split: str, timesta
     for col in df.columns:
         if col in {"timestamp"}:
             continue
-        df[col] = pd.to_numeric(df[col], errors="ignore")
+        # Use `coerce` + selective replacement for compatibility with pandas builds
+        # where `errors="ignore"` is rejected.
+        coerced = pd.to_numeric(df[col], errors="coerce")
+        if coerced.notna().any():
+            df[col] = coerced
 
     df["source_file"] = file_path.name
     df["source_path"] = str(file_path)
