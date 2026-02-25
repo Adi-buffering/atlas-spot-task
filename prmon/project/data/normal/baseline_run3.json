@@ -1,0 +1,52 @@
+{
+  "Avg": {
+    "nprocs": 1.988,
+    "nthreads": 1.988,
+    "pss": 1784568.0,
+    "rchar": 3877.0,
+    "read_bytes": 0.0,
+    "rss": 3568712.0,
+    "rx_bytes": 180895.0,
+    "rx_packets": 1015.0,
+    "swap": 0.0,
+    "tx_bytes": 416311.0,
+    "tx_packets": 1225.0,
+    "vmem": 3989414.0,
+    "wchar": 54.117,
+    "write_bytes": 0.0
+  },
+  "HW": {
+    "cpu": {
+      "CPUs": 4,
+      "CoresPerSocket": 2,
+      "ModelName": "AMD EPYC 7763 64-Core Processor",
+      "Sockets": 1,
+      "ThreadsPerCore": 2
+    },
+    "mem": {
+      "MemTotal": 16379888
+    }
+  },
+  "Max": {
+    "nprocs": 2,
+    "nthreads": 2,
+    "pss": 1802316,
+    "rchar": 6592,
+    "read_bytes": 0,
+    "rss": 3607408,
+    "rx_bytes": 307523,
+    "rx_packets": 1727,
+    "stime": 0,
+    "swap": 0,
+    "tx_bytes": 707729,
+    "tx_packets": 2084,
+    "utime": 1,
+    "vmem": 4012744,
+    "wchar": 92,
+    "write_bytes": 0,
+    "wtime": 170
+  },
+  "prmon": {
+    "Version": "3.2.0"
+  }
+}

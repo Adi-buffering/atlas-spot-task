@@ -1,0 +1,130 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "graeme-a-stewart",
+      "name": "Graeme A Stewart",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8511620?v=4",
+      "profile": "https://graeme-a-stewart.github.io",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "amete",
+      "name": "Alaettin Serhan Mete",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7428938?v=4",
+      "profile": "https://amete.github.io",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "quantum-shift",
+      "name": "Anubhab Das",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61076821?v=4",
+      "profile": "https://github.com/quantum-shift",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "chuckatkins",
+      "name": "Chuck Atkins",
+      "avatar_url": "https://avatars.githubusercontent.com/u/320135?v=4",
+      "profile": "https://github.com/chuckatkins",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "Cossack42",
+      "name": "Ismail Ryabchuk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93450240?v=4",
+      "profile": "https://github.com/Cossack42",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chrisburr",
+      "name": "Chris Burr",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5220533?v=4",
+      "profile": "https://github.com/chrisburr",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rmaganza",
+      "name": "Riccardo Maganza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18355062?v=4",
+      "profile": "https://github.com/rmaganza",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "miguelgila",
+      "name": "Miguel Gila",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7137318?v=4",
+      "profile": "http://www.cscs.ch",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "protopopescu",
+      "name": "Dan Protopopescu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23111675?v=4",
+      "profile": "http://ppewww.physics.gla.ac.uk/~protopop/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jmcarcell",
+      "name": "Juan Miguel Carceller",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22276694?v=4",
+      "profile": "https://github.com/jmcarcell",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "Siddhant2306",
+      "name": "Siddhant2306",
+      "avatar_url": "https://avatars.githubusercontent.com/u/174049098?v=4",
+      "profile": "https://github.com/Siddhant2306",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "EyupKeremBas7",
+      "name": "Eyüp Kerem Baş",
+      "avatar_url": "https://avatars.githubusercontent.com/u/165667589?v=4",
+      "profile": "https://github.com/EyupKeremBas7",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "prmon",
+  "projectOwner": "HSF"
+}
