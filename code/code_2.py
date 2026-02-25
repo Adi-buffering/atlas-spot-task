@@ -84,7 +84,12 @@ def discover_files(base_path: Path) -> List[Tuple[Path, str]]:
 
 
 def _read_delimited(path: Path, sep: str) -> pd.DataFrame:
-    return pd.read_csv(path, sep=sep, engine="python", on_bad_lines="skip")
+    """Read delimited text across multiple pandas versions."""
+    try:
+        return pd.read_csv(path, sep=sep, engine="python", on_bad_lines="skip")
+    except TypeError:
+        # pandas<1.3 compatibility
+        return pd.read_csv(path, sep=sep, engine="python", error_bad_lines=False, warn_bad_lines=False)
 
 
 def _read_json_flexible(path: Path) -> pd.DataFrame:
@@ -124,6 +129,9 @@ def _read_json_flexible(path: Path) -> pd.DataFrame:
 
 def load_single_file(path: Path) -> pd.DataFrame:
     """Robust loader for csv/tsv/json/log with malformed row tolerance."""
+    if path.stat().st_size == 0:
+        return pd.DataFrame()
+
     suffix = path.suffix.lower()
     if suffix == ".csv":
         return _read_delimited(path, sep=",")
@@ -135,8 +143,14 @@ def load_single_file(path: Path) -> pd.DataFrame:
     # .log fallback: try whitespace-delimited tabular parse, then CSV sniffing.
     try:
         return pd.read_csv(path, sep=r"\s+", engine="python", on_bad_lines="skip")
+    except TypeError:
+        # pandas<1.3 compatibility
+        return pd.read_csv(path, sep=r"\s+", engine="python", error_bad_lines=False, warn_bad_lines=False)
     except Exception:
-        return pd.read_csv(path, sep=None, engine="python", on_bad_lines="skip")
+        try:
+            return pd.read_csv(path, sep=None, engine="python", on_bad_lines="skip")
+        except TypeError:
+            return pd.read_csv(path, sep=None, engine="python", error_bad_lines=False, warn_bad_lines=False)
 
 
 def _select_timestamp_column(df: pd.DataFrame, override: str = "") -> Optional[str]:
@@ -169,7 +183,11 @@ def standardize_dataframe(df: pd.DataFrame, file_path: Path, split: str, timesta
     for col in df.columns:
         if col in {"timestamp"}:
             continue
-        df[col] = pd.to_numeric(df[col], errors="ignore")
+        # Use `coerce` + selective replacement for compatibility with pandas builds
+        # where `errors="ignore"` is rejected.
+        coerced = pd.to_numeric(df[col], errors="coerce")
+        if coerced.notna().any():
+            df[col] = coerced
 
     df["source_file"] = file_path.name
     df["source_path"] = str(file_path)
@@ -189,7 +207,7 @@ def build_master_dataframe(base_path: Path, timestamp_override: str = "") -> pd.
             raw = load_single_file(path)
             std = standardize_dataframe(raw, path, split, timestamp_override=timestamp_override)
             if std.empty:
-                logging.warning("Skipping empty frame from %s", path)
+                logging.info("Skipping empty/unreadable tabular content from %s", path)
                 continue
 
             numeric_candidates = std.select_dtypes(include=[np.number]).columns.tolist()
