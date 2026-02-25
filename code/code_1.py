@@ -129,6 +129,9 @@ def _read_json_flexible(path: Path) -> pd.DataFrame:
 
 def load_single_file(path: Path) -> pd.DataFrame:
     """Robust loader for csv/tsv/json/log with malformed row tolerance."""
+    if path.stat().st_size == 0:
+        return pd.DataFrame()
+
     suffix = path.suffix.lower()
     if suffix == ".csv":
         return _read_delimited(path, sep=",")
@@ -140,8 +143,14 @@ def load_single_file(path: Path) -> pd.DataFrame:
     # .log fallback: try whitespace-delimited tabular parse, then CSV sniffing.
     try:
         return pd.read_csv(path, sep=r"\s+", engine="python", on_bad_lines="skip")
+    except TypeError:
+        # pandas<1.3 compatibility
+        return pd.read_csv(path, sep=r"\s+", engine="python", error_bad_lines=False, warn_bad_lines=False)
     except Exception:
-        return pd.read_csv(path, sep=None, engine="python", on_bad_lines="skip")
+        try:
+            return pd.read_csv(path, sep=None, engine="python", on_bad_lines="skip")
+        except TypeError:
+            return pd.read_csv(path, sep=None, engine="python", error_bad_lines=False, warn_bad_lines=False)
 
 
 def _select_timestamp_column(df: pd.DataFrame, override: str = "") -> Optional[str]:
@@ -198,7 +207,7 @@ def build_master_dataframe(base_path: Path, timestamp_override: str = "") -> pd.
             raw = load_single_file(path)
             std = standardize_dataframe(raw, path, split, timestamp_override=timestamp_override)
             if std.empty:
-                logging.warning("Skipping empty frame from %s", path)
+                logging.info("Skipping empty/unreadable tabular content from %s", path)
                 continue
             all_frames.append(std)
             logging.info("Loaded %s rows=%d cols=%d", path.name, len(std), len(std.columns))
