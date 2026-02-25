@@ -1,0 +1,16 @@
+{
+  "labeling_note": "Weak labels were used: points from dataset/anomalies are treated as anomalous and points from dataset/normal are treated as normal. This overestimates anomaly coverage because anomaly files can contain normal points.",
+  "n_rows": 2516,
+  "n_predicted_anomalies": 1632,
+  "confusion_matrix": {
+    "tn": 746,
+    "fp": 40,
+    "fn": 138,
+    "tp": 1592
+  },
+  "precision": 0.9754901960784313,
+  "recall": 0.9202312138728324,
+  "f1": 0.9470553242117787,
+  "roc_auc": 0.952548206327494,
+  "pr_auc": 0.9739916318466196
+}
