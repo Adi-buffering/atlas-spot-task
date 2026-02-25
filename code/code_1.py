@@ -13,6 +13,7 @@ Usage example:
 from __future__ import annotations
 
 import argparse
+import os
 import json
 import logging
 from pathlib import Path
@@ -43,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     """CLI/config block for reproducible runs."""
     parser = argparse.ArgumentParser(description="Isolation Forest anomaly detection for time-series runs")
     parser.add_argument("--dataset-path", default="dataset", help="Root dataset folder")
-    parser.add_argument("--output-dir", default="outputs", help="Output folder")
+    parser.add_argument("--output-dir", default="outputs_code1", help="Output folder")
     parser.add_argument(
         "--contamination",
         type=float,
@@ -320,7 +321,7 @@ def evaluate(pred_df: pd.DataFrame) -> Dict[str, object]:
 def plot_results(pred_df: pd.DataFrame, out_dir: Path, feature_for_plot: str) -> None:
     """Save per-file time-series and score plots with anomaly highlights."""
     fig_dir = out_dir / "figures"
-    fig_dir.mkdir(parents=True, exist_ok=True)
+    os.makedirs(fig_dir, exist_ok=True)
 
     for source_file, gdf in pred_df.groupby("source_file", sort=True):
         gdf = gdf.sort_values("timestamp").reset_index(drop=True)
@@ -351,7 +352,7 @@ def plot_results(pred_df: pd.DataFrame, out_dir: Path, feature_for_plot: str) ->
 
 
 def save_outputs(pred_df: pd.DataFrame, metrics: Dict[str, object], out_dir: Path) -> None:
-    out_dir.mkdir(parents=True, exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
     pred_df.to_csv(out_dir / "predictions.csv", index=False)
     with (out_dir / "metrics.json").open("w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
@@ -365,7 +366,10 @@ def main() -> None:
     np.random.seed(RANDOM_SEED)
 
     base_path = Path(args.dataset_path)
-    out_dir = Path(args.output_dir)
+    script_dir = Path(__file__).resolve().parent
+    output_dir_arg = Path(args.output_dir)
+    out_dir = output_dir_arg if output_dir_arg.is_absolute() else script_dir / output_dir_arg
+    os.makedirs(out_dir, exist_ok=True)
 
     requested_features = [c.strip() for c in args.feature_cols.split(",") if c.strip()]
 
