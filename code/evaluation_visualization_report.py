@@ -20,8 +20,8 @@ from typing import Dict, List, Tuple
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Code 4 evaluation + visualization")
-    parser.add_argument("--input-predictions", default="code/outputs_code2/predictions.csv")
-    parser.add_argument("--output-dir", default="code/outputs_code4")
+    parser.add_argument("--input-predictions", default="code/anomaly_detection_pipeline_output/predictions.csv")
+    parser.add_argument("--output-dir", default="code/evaluation_visualization_report_output")
     parser.add_argument("--target-signal", default="")
     return parser.parse_args()
 
