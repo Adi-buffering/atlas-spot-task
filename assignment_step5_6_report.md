@@ -10,7 +10,7 @@ Per final project direction:
 
 ---
 
-## Step 5 — Evaluate and visualize the detection results
+## Step 5 — Evaluated and visualized the detection results
 
 ### Method used for evaluation
 The detector produces row-level anomaly flags and scores. Performance is summarized with weak-label metrics, where folder origin is used as approximate ground truth (`normal` vs `anomalies`).
