@@ -1,7 +1,7 @@
 
 # Atlas Spot Task: Telemetry Anomaly Detection
 
-This project is your assignment implementation for anomaly detection on telemetry time-series data using an **Isolation Forest** workflow.
+This project is the assignment implementation for anomaly detection on telemetry time-series data using an **Isolation Forest** workflow.
 
 It includes:
 - a robust data-loading + anomaly detection pipeline,
