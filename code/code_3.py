@@ -2,6 +2,7 @@
 """Concise Isolation Forest pipeline for CSV time-series anomaly detection."""
 
 import argparse
+import os
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -18,14 +19,17 @@ def main():
     parser = argparse.ArgumentParser(description="Isolation Forest on dataset/{normal,anomalies} CSV files")
     parser.add_argument("--dataset-path", default="dataset", help="Root dataset path")
     parser.add_argument("--contamination", type=float, default=0.05, help="IsolationForest contamination")
-    parser.add_argument("--output-dir", default="outputs", help="Output directory")
+    parser.add_argument("--output-dir", default="outputs_code3", help="Output directory")
     args = parser.parse_args()
 
     np.random.seed(42)
     base = Path(args.dataset_path)
-    out_dir = Path(args.output_dir)
+    script_dir = Path(__file__).resolve().parent
+    output_dir_arg = Path(args.output_dir)
+    out_dir = output_dir_arg if output_dir_arg.is_absolute() else script_dir / output_dir_arg
+    os.makedirs(out_dir, exist_ok=True)
     fig_dir = out_dir / "figures"
-    fig_dir.mkdir(parents=True, exist_ok=True)
+    os.makedirs(fig_dir, exist_ok=True)
 
     rows = []
     for split, label in [("normal", 0), ("anomalies", 1)]:
