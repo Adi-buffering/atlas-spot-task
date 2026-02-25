@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Code 4: evaluation + visualization using existing deterministic predictions.
+"""Evaluation + visualization using existing deterministic predictions.
 
-This script reuses outputs from code_2 (predictions.csv), computes weak-label metrics,
-builds per-file anomaly overlays against the original signal, and writes a concise
-suitability/trade-off analysis.
+This script reuses outputs from the anomaly detection pipeline (predictions.csv),
+computes weak-label metrics, builds per-file anomaly overlays against the original
+signal, and writes a concise suitability/trade-off analysis.
 """
 
 from __future__ import annotations
@@ -19,12 +19,29 @@ from typing import Dict, List, Tuple
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Code 4 evaluation + visualization")
-    parser.add_argument("--input-predictions", default="code/outputs_code2/predictions.csv")
-    parser.add_argument("--output-dir", default="code/outputs_code4")
+    parser = argparse.ArgumentParser(description="Evaluation + visualization report generator")
+    parser.add_argument("--input-predictions", default="code/outputs_anomaly_detection/predictions.csv")
+    parser.add_argument("--output-dir", default="code/outputs_evaluation_visualization")
     parser.add_argument("--target-signal", default="")
     return parser.parse_args()
 
+
+
+
+def resolve_input_predictions(repo_root: Path, configured_path: str) -> Path:
+    input_path = Path(configured_path)
+    if not input_path.is_absolute():
+        input_path = repo_root / input_path
+
+    if input_path.exists():
+        return input_path
+
+    # Backward-compatible fallback for legacy output naming.
+    legacy = repo_root / "code/outputs_code2/predictions.csv"
+    if legacy.exists():
+        return legacy
+
+    return input_path
 
 def _to_float(value: str) -> float:
     try:
@@ -266,9 +283,7 @@ def main() -> None:
     args = parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
-    input_path = Path(args.input_predictions)
-    if not input_path.is_absolute():
-        input_path = repo_root / input_path
+    input_path = resolve_input_predictions(repo_root, args.input_predictions)
 
     out_dir = Path(args.output_dir)
     if not out_dir.is_absolute():

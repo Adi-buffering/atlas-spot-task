@@ -7,7 +7,7 @@ normalizes schema differences, trains Isolation Forest on normal runs, predicts 
 all runs, evaluates weak-label metrics, and saves tabular + figure outputs.
 
 Usage example:
-    python isolation_forest_timeseries_pipeline.py --dataset-path dataset --contamination 0.05
+    python code/anomaly_detection_pipeline.py --dataset-path dataset --contamination 0.05
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     """CLI/config block for reproducible runs."""
     parser = argparse.ArgumentParser(description="Isolation Forest anomaly detection for time-series runs")
     parser.add_argument("--dataset-path", default="dataset", help="Root dataset folder")
-    parser.add_argument("--output-dir", default="outputs_code2", help="Output folder")
+    parser.add_argument("--output-dir", default="outputs_anomaly_detection", help="Output folder")
     parser.add_argument(
         "--contamination",
         type=float,
